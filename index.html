@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>留言版</title>
+</head>
+<script type="text/javascript" src="jquery-1.7.2.min.js"></script>
+<script type="text/javascript">
+function ck_all(){
+	$("input[name='ck[]']").each(function(){
+		$(this).attr("checked",true);
+	});
+}
+
+function add_message(){
+	$("#add_form").load("add_form.php");
+}
+
+function del(){
+	var cbxVehicle = new Array();
+	var row = new Array();
+	$('input:checkbox:checked[name="ck[]"]').each(function(i) {
+		cbxVehicle[i] = this.value;
+		row[i] = this.parentElement.parentElement.rowIndex;
+		del_mes(cbxVehicle[i],row[i]);
+	});
+	function del_mes(id,row){
+		var str="id="+id;
+		$.ajax({
+			type: "POST",
+			url: "message_del.php",
+			data: str,
+			success: function(){
+				myTable.deleteRow(row);
+			}
+		});
+	}	
+}
+
+</script>
+
+<body>
+<div><input type="button" value="新增留言" onclick="add_message()" /></div>
+<div><input type="button" value="全選留言" onclick="ck_all()" /></div>
+<div><input type="button" value="刪除留言" onclick="del()" /></div>
+<div id="message_list">
+<script type="text/javascript">
+$("#message_list").load("message_list.php");
+</script>
+</div>
+<div id="add_form">
+
+</div>
+
+</body>
+</html>
